@@ -1,8 +1,10 @@
 import pytgpt.gpt4free as provider
+import nest_asyncio
 
 import discord
 from discord.ext import commands
 
+nest_asyncio.apply()
 ai = provider.GPT4FREE(provider="You")
 
 def parse_dotenv():
@@ -27,7 +29,7 @@ bot_token = env["BOT_TOKEN"]
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-def process_message_with_ai(content):
+async def process_message_with_ai(content):
     return ai.chat(content)
 
 @bot.event

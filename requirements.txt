@@ -1,2 +1,4 @@
+python-tgpt
+nest-asyncio
 g4f
-discord
+discord.py
