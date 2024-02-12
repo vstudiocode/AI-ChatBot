@@ -1,3 +1,5 @@
+import re
+
 import pytgpt.gpt4free as provider
 import nest_asyncio
 
@@ -44,9 +46,9 @@ async def on_message(message: commands.clean_content):
 
     if bot.user.mentioned_in(message):
         message_to_edit = await message.reply("<a:loading:1204153312748769330> Processing...")
-        content = message.content.replace("<@1204147459635417169> ", "")
+        content = message.content.replace(bot.user.mention, "\u200b")
         try:
-            response = await process_message_with_ai(content)
+            response = await process_message_with_ai(content.replace("@", "@\u200b"))
             if len(response) > 2000:
                 with open('response.txt', 'w') as f:
                     f.write(response)
