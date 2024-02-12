@@ -1,6 +1,9 @@
-import g4f
+import pytgpt.gpt4free as provider
+
 import discord
 from discord.ext import commands
+
+ai = provider.GPT4FREE(provider="You")
 
 def parse_dotenv():
     env = {}
@@ -23,16 +26,9 @@ intents.members = True
 bot_token = env["BOT_TOKEN"]
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-g4f.debug.logging = False
-g4f.debug.version_check = False
 
 def process_message_with_ai(content):
-    response = g4f.ChatCompletion.create_async(
-                model=g4f.models.gpt_4, # You doesn't allow usage of gpt_4 for free so it automatically defaults to GPT3 / GPT3.5
-                messages=[{"role": "user", "content": content}],
-                provider=g4f.Provider.You,
-            )
-    return response
+    return ai.chat(content)
 
 @bot.event
 async def on_ready():
@@ -40,7 +36,7 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
 
 @bot.event
-async def on_message(message):
+async def on_message(message: commands.clean_content):
     if message.author == bot.user:
         return
 
@@ -49,8 +45,6 @@ async def on_message(message):
         content = message.content.replace("<@1204147459635417169> ", "")
         try:
             response = await process_message_with_ai(content)
-            # Replacing the mentions with broken ones so people can't abuse the bot and ping everyone & here with it
-            response = response.replace("@everyone", "@\u200beveryone").replace("@here", "@\u200bhere")
             if len(response) > 2000:
                 with open('response.txt', 'w') as f:
                     f.write(response)
