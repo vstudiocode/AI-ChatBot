@@ -1,5 +1,3 @@
-import re
-
 import pytgpt.gpt4free as provider
 import nest_asyncio
 
