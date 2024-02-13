@@ -52,6 +52,7 @@ async def on_message(message):
     if bot.user.mentioned_in(message) and not message.content == "":
         # For some reason when a message starts with @everyone or @here the message is empty.. don't ask me why.
         # But, that works. The bot wont reply to messages with pings in anymore, no matter where the ping is.
+        print(f"message content : \"{message.content}\"")
         message_to_edit = await message.reply(
             "<a:loading:1204153312748769330> Processing..."
         )
